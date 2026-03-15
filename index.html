@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khusan Eldorov | Как я прохожу трудности</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- GSAP Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(-45deg, #0f172a, #581c87, #c2410c, #0e7490);
+            --neon-cyan: #00f2ff;
+            --neon-purple: #bc13fe;
+            --neon-orange: #ff8c00;
+            --font-main: 'Inter', sans-serif;
+            --font-accent: 'Orbitron', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background: #050505;
+            color: #fff;
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            background-attachment: fixed;
+        }
+
+        /* Background Atmosphere */
+        .viewport-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            z-index: -2;
+            animation: gradientMove 15s ease infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .shapes-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+        }
+
+        /* Sound Toggle */
+        .sound-control {
+            position: fixed;
+            top: 30px; right: 30px;
+            z-index: 1000;
+            cursor: pointer;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: 0.3s;
+        }
+        .sound-control:hover { background: rgba(255,255,255,0.2); }
+
+        /* General Section Styling */
+        section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 10%;
+            overflow: hidden;
+        }
+
+        .content-wrap {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1, h2 {
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
+        }
+
+        .neon-cyan { color: var(--neon-cyan); text-shadow: 0 0 15px var(--neon-cyan); }
+        .neon-orange { color: var(--neon-orange); text-shadow: 0 0 15px var(--neon-orange); }
+
+        .accent-font { font-family: var(--font-accent); letter-spacing: 4px; }
+
+        /* --- Specific Sections --- */
+
+        /* Hero */
+        .hero h1 { font-size: clamp(3rem, 8vw, 6rem); }
+        .hero p { font-size: 1.5rem; margin-top: 20px; opacity: 0.8; }
+
+        /* Reality - Words */
+        .reality-text { font-size: clamp(2rem, 5vw, 4rem); }
+        .word { display: inline-block; opacity: 0.2; margin: 0 5px; }
+
+        /* Key Idea - Scale */
+        .key-idea-text { font-size: 3rem; transform: scale(0.5); }
+
+        /* Split Screen */
+        .split-container {
+            display: flex;
+            gap: 50px;
+            width: 100%;
+            justify-content: center;
+        }
+        .side-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 50px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            width: 400px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        /* Methods Cards */
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .method-card {
+            background: rgba(0,0,0,0.4);
+            padding: 30px;
+            border: 1px solid var(--neon-cyan);
+            border-radius: 15px;
+            font-size: 1.2rem;
+        }
+
+        .strategy-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            height: 60vh;
+        }
+        .panel {
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .quote-line {
+            width: 100px;
+            height: 4px;
+            background: var(--neon-cyan);
+            margin: 20px auto;
+            border-radius: 2px;
+        }
+
+        /* --- Scroll Progress Bar --- */
+        .progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 4px; width: 0%;
+            background: var(--neon-cyan);
+            z-index: 1001;
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="progress-bar"></div>
+    <div class="viewport-bg"></div>
+    <div class="shapes-container" id="shapes"></div>
+
+    <div class="sound-control" id="soundToggle">Sound OFF</div>
+    <audio id="bgMusic" loop>
+        <source src="https://www.chosic.com/wp-content/uploads/2021/07/The-Wait-Cinematic-Ambient.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- SECTION 1: HERO -->
+    <section class="hero" id="s1">
+        <div class="content-wrap">
+            <h1 class="accent-font glow-text">Как я прохожу трудности</h1>
+            <p>Это не мотивация. <br>Это мой реальный способ жить.</p>
+        </div>
+    </section>
+
+    <!-- SECTION 2: HUMAN REALITY -->
+    <section id="s2">
+        <div class="content-wrap reality-text">
+            <div id="wordContainer">
+                <!-- JS will inject words here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: KEY IDEA -->
+    <section id="s3">
+        <div class="content-wrap">
+            <h2 class="key-idea-text">Но разочарование — <br>это минус для тебя.</h2>
+            <h2 class="subtitle-idea" style="opacity:0; margin-top:30px;">
+                Чем быстрее ты выходишь из этого состояния,<br>
+                тем быстрее возвращается <span class="neon-cyan accent-font">контроль</span>.
+            </h2>
+        </div>
+    </section>
+
+    <!-- SECTION 4: TWO TYPES -->
+    <section id="s4">
+        <div class="content-wrap">
+            <div class="split-container">
+                <div class="side-card" id="cardLeft">
+                    <h3 class="accent-font">Избегают трудностей</h3>
+                </div>
+                <div class="side-card" id="cardRight">
+                    <h3 class="accent-font">Принимают вызов</h3>
+                </div>
+            </div>
+            <h2 id="s4-final-text" style="opacity:0; margin-top:50px;" class="accent-font neon-orange">Я выбираю второй путь.</h2>
+        </div>
+    </section>
+
+    <!-- SECTION 5: APPROACH -->
+    <section id="s5">
+        <div class="content-wrap" style="text-align: left;">
+            <h2 class="app-line">Я не убегаю от проблем.</h2>
+            <h2 class="app-line">Я смотрю на них прямо.</h2>
+            <h2 class="app-line neon-cyan" style="margin-top:40px;">Иногда это тяжело. <br>Но именно там появляется рост.</h2>
+        </div>
+    </section>
+
+    <!-- SECTION 6: METHOD -->
+    <section id="s6">
+        <div class="content-wrap">
+            <div class="method-grid">
+                <div class="method-card">Перефразировать проблему</div>
+                <div class="method-card">Разбить её на части</div>
+                <div class="method-card">Решать постепенно</div>
+                <div class="method-card">Повторять процесс</div>
+            </div>
+            <div id="morphMessage" style="margin-top: 50px; font-size: 2rem; display: none;">
+                <p id="morph1">Не нужно съедать проблему целиком.</p>
+                <p id="morph2" style="display:none;" class="neon-cyan">Нужно переваривать её по частям.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 7: EXAMPLE -->
+    <section id="s7">
+        <div class="content-wrap">
+            <div class="example-card" id="ex1"><h2>Хочешь начать читать книги?</h2></div>
+            <div class="example-card" id="ex2" style="display:none;"><h2>Не нужно читать 200 страниц.</h2></div>
+            <div class="example-card" id="ex3" style="display:none;"><h2 class="neon-cyan">Начни с 5 страниц.</h2></div>
+        </div>
+    </section>
+
+    <!-- SECTION 8: HONESTY -->
+    <section id="s8">
+        <div class="content-wrap">
+            <p class="h-line">Я не идеальный человек.</p>
+            <p class="h-line">Я тоже разочаровываюсь.</p>
+            <p class="h-line">Иногда я ничего не хочу делать.</p>
+            <h2 class="h-final neon-orange accent-font" style="margin-top:30px;">Но я всегда возвращаюсь.</h2>
+        </div>
+    </section>
+
+    <!-- SECTION 9: STRATEGY -->
+    <section id="s9">
+        <div class="strategy-panel">
+            <div class="panel">
+                <h2 class="accent-font neon-cyan">План</h2>
+                <p>analysis / information / strategy</p>
+            </div>
+            <div class="panel">
+                <h2 class="accent-font neon-orange">Риск</h2>
+                <p>action / impulse / experience</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 10: PHILOSOPHY -->
+    <section id="s10">
+        <div class="content-wrap">
+            <p class="p-line">У каждого человека свой способ проходить трудности.</p>
+            <p class="p-line">Я не учу вас жить.</p>
+            <p class="p-line accent-font neon-cyan">Я просто делюсь своим опытом.</p>
+        </div>
+    </section>
+
+    <!-- SECTION 11: QUOTE -->
+    <section id="s11">
+        <div class="content-wrap">
+            <h2 class="quote-text" style="font-size: 2.5rem;">"Sometimes a little worry helps you think ahead and live longer."</h2>
+            <div class="quote-line"></div>
+        </div>
+    </section>
+
+    <!-- SECTION 12: FINAL -->
+    <section id="s12">
+        <div class="content-wrap">
+            <h2 class="f-1">Трудности — это не проблема.</h2>
+            <h1 class="f-2 accent-font glow-text neon-cyan" style="margin-top:40px; transform: scale(0.1); opacity:0;">Это материал для <span class="neon-cyan">роста</span>.</h1>
+        </div>
+    </section>
+
+    <!-- SECTION 13: SIGNATURE -->
+    <section id="s13">
+        <div class="content-wrap">
+            <h1 class="accent-font">Khusan Eldorov</h1>
+            <p class="accent-font neon-cyan">CEO</p>
+            <div style="margin-top: 20px; opacity: 0.6;">
+                <p>Mathphoria</p>
+                <p>1910US</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- Init Audio ---
+        const music = document.getElementById('bgMusic');
+        const soundBtn = document.getElementById('soundToggle');
+        let isPlaying = false;
+
+        soundBtn.addEventListener('click', () => {
+            if (!isPlaying) {
+                music.play();
+                soundBtn.innerText = "Sound ON";
+            } else {
+                music.pause();
+                soundBtn.innerText = "Sound OFF";
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // --- Floating Shapes ---
+        const shapesContainer = document.getElementById('shapes');
+        for (let i = 0; i < 15; i++) {
+            const shape = document.createElement('div');
+            shape.className = 'shape';
+            const size = Math.random() * 100 + 50;
+            shape.style.width = `${size}px`;
+            shape.style.height = `${size}px`;
+            shape.style.left = `${Math.random() * 100}%`;
+            shape.style.top = `${Math.random() * 100}%`;
+            shapesContainer.appendChild(shape);
+
+            gsap.to(shape, {
+                x: 'random(-100, 100)',
+                y: 'random(-100, 100)',
+                rotation: 'random(0, 360)',
+                duration: 'random(10, 20)',
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut"
+            });
+        }
+
+        // --- Progress Bar ---
+        gsap.to(".progress-bar", {
+            width: "100%",
+            ease: "none",
+            scrollTrigger: { scrub: 0.3 }
+        });
+
+        // --- Animations ---
+
+        // S1 Hero
+        gsap.from(".hero h1", { scale: 2, opacity: 0, duration: 2, ease: "expo.out" });
+        gsap.from(".hero p", { opacity: 0, y: 30, delay: 1 });
+
+        // S2 Reality - Word by Word
+        const text = "Каждый человек сталкивается с трудностями. Первая реакция — разочарование. И это нормально.";
+        const wordContainer = document.getElementById('wordContainer');
+        text.split(" ").forEach(w => {
+            const span = document.createElement('span');
+            span.innerText = w + " ";
+            span.className = 'word';
+            wordContainer.appendChild(span);
+        });
+
+        gsap.to(".word", {
+            opacity: 1,
+            color: "#00f2ff",
+            stagger: 0.1,
+            scrollTrigger: {
+                trigger: "#s2",
+                start: "top center",
+                end: "bottom center",
+                scrub: true
+            }
+        });
+
+        // S3 Scale Idea
+        const tl3 = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#s3",
+                start: "top center",
+                end: "bottom center",
+                scrub: 1
+            }
+        });
+        tl3.to(".key-idea-text", { scale: 1.2, duration: 1 })
+           .to(".subtitle-idea", { opacity: 1, y: -20 });
+
+        // S4 Split Screen
+        const tl4 = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#s4",
+                start: "top center",
+                end: "bottom center",
+                scrub: 1
+            }
+        });
+        tl4.from("#cardLeft", { x: -300, opacity: 0 })
+           .from("#cardRight", { x: 300, opacity: 0 }, "<")
+           .to("#s4-final-text", { opacity: 1, y: -10 });
+
+        // S5 Approach Lines
+        gsap.from(".app-line", {
+            x: -50,
+            opacity: 0,
+            stagger: 0.8,
+            scrollTrigger: {
+                trigger: "#s5",
+                start: "top center",
+                end: "bottom center",
+                scrub: 1
+            }
+        });
+
+        // S6 Morph Cards
+        const tl6 = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#s6",
+                start: "top center",
+                end: "bottom center",
+                scrub: 1
+            }
+        });
+        tl6.from(".method-card", { scale: 0.8, opacity: 0, stagger: 0.2 })
+           .to(".method-grid", { opacity: 0, display: 'none' })
+           .to("#morphMessage", { display: 'block', opacity: 1 })
+           .to("#morph2", { display: 'block', opacity: 1 });
+
+        // S7 Example Story
+        const tl7 = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#s7",
+                start: "top center",
+                end: "bottom center",
+                scrub: 1
+            }
+        });
+        tl7.to("#ex1", { x: -1000, opacity: 0, delay: 1 })
+           .fromTo("#ex2", { opacity: 0 }, { display: 'block', opacity: 1 })
+           .to("#ex2", { x: 1000, opacity: 0, delay: 1 })
+           .fromTo("#ex3", { opacity: 0, scale: 0.5 }, { display: 'block', opacity: 1, scale: 1.2 });
+
+        // S8 Honesty
+        gsap.from(".h-line, .h-final", {
+            opacity: 0,
+            y: 20,
+            stagger: 0.5,
+            scrollTrigger: {
+                trigger: "#s8",
+                start: "top center",
+                end: "bottom center",
+                scrub: 1
+            }
+        });
+
+        // S12 Final Message
+        const tl12 = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#s12",
+                start: "top center",
+                end: "bottom center",
+                scrub: 1
+            }
+        });
+        tl12.from(".f-1", { y: 50, opacity: 0 })
+            .to(".f-2", { scale: 1.5, opacity: 1 });
+
+        // S13 Signature
+        gsap.from("#s13 h1, #s13 p", {
+            opacity: 0,
+            y: 20,
+            stagger: 0.2,
+            scrollTrigger: {
+                trigger: "#s13",
+                start: "top 80%",
+                end: "bottom center",
+                scrub: 1
+            }
+        });
+
+    </script>
+</body>
+</html>
